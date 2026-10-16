@@ -1,0 +1,18 @@
+project: default
+source:
+  repoURL: https://github.com/yasmineelaafia/helm.git
+  path: .
+  targetRevision: HEAD
+  helm:
+    parameters:
+      - name: app.contextPath
+        value: /tp9
+destination:
+  server: https://kubernetes.default.svc
+  namespace: tp9-argocd
+syncPolicy:
+  automated:
+    prune: true
+    selfHeal: true
+  syncOptions:
+    - CreateNamespace=true
