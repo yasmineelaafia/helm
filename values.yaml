@@ -1,5 +1,5 @@
 image:
-  repository: "ghcr.io/<VOTRE_USER_GITHUB>/spring-petclinic"
+  repository: "ghcr.io/yasmineelaafia/spring-petclinic"
 
 replicas: 1
 
