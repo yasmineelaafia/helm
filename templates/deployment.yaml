@@ -6,7 +6,7 @@ metadata:
   labels:
     myversion: "1"
 spec:
-  replicas: 3
+  replicas: {{ .Values.replicas }}
   selector:
     matchLabels:
       app: clinic-front
@@ -19,28 +19,35 @@ spec:
         - name: ghcr-secret
       containers:
         - name: springboot
-          image: ghcr.io/yasmineelaafia/spring-petclinic:4.0.0-SNAPSHOT
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+
+          env:
+            - name: SERVER_SERVLET_CONTEXT_PATH
+              value: {{ .Values.app.contextPath | default "/" | quote }}
+
           startupProbe:
             httpGet:
-              path: /actuator/health/readiness
+              path: {{ .Values.app.contextPath }}/actuator/health/readiness
               port: 8080
-            timeoutSeconds: 2
-            periodSeconds: 10
             initialDelaySeconds: 10
+            periodSeconds: 10
             failureThreshold: 30
+            timeoutSeconds: 2
+
           livenessProbe:
             httpGet:
-              path: /actuator/health/liveness
+              path: {{ .Values.app.contextPath }}/actuator/health/liveness
               port: 8080
-            timeoutSeconds: 2
-            periodSeconds: 10
             initialDelaySeconds: 30
+            periodSeconds: 10
             failureThreshold: 3
+            timeoutSeconds: 2
+
           readinessProbe:
             httpGet:
-              path: /actuator/health/readiness
+              path: {{ .Values.app.contextPath }}/actuator/health/readiness
               port: 8080
-            timeoutSeconds: 2
-            periodSeconds: 10
             initialDelaySeconds: 20
+            periodSeconds: 10
             failureThreshold: 6
+            timeoutSeconds: 2
