@@ -1,18 +1,24 @@
-project: default
-source:
-  repoURL: https://github.com/yasmineelaafia/helm.git
-  path: .
-  targetRevision: HEAD
-  helm:
-    parameters:
-      - name: app.contextPath
-        value: /tp9
-destination:
-  server: https://kubernetes.default.svc
-  namespace: tp9-argocd
-syncPolicy:
-  automated:
-    prune: true
-    selfHeal: true
-  syncOptions:
-    - CreateNamespace=true
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: petclinic
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/yasmineelaafia/helm.git
+    targetRevision: HEAD
+    path: '.'
+    helm:
+      parameters:
+      - name: "app.contextPath"
+        value: "/tp9"
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: tp9-argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
